@@ -27,7 +27,7 @@ struct stContact
     string Email = "";
     string Address = "";
 };
-string FullName(stContact Contact)
+string GetFullName(stContact Contact)
 {
     return Contact.FirstName + " " + Contact.LastName;
 }
@@ -37,7 +37,7 @@ void PrintContactCard(stContact &Contact)
     cout << "\n";
     cout << string(40, '-') << "\n";
     cout << left << setw(12) << "Name"
-        << ": " << FullName(Contact) << "\n";
+        << ": " << GetFullName(Contact) << "\n";
     cout << left << setw(12) << "Phone"
         << ": " << Contact.Phone << "\n";
     cout << left << setw(12) << "Email"
@@ -67,7 +67,7 @@ void PrintContactList(vector<stContact>& vContacts)
     {
         cout << left
             << setw(5) << i + 1
-            << setw(20) << FullName(vContacts[i])
+            << setw(20) << GetFullName(vContacts[i])
             << setw(15) << vContacts[i].Phone
             << setw(25) << vContacts[i].Email << "\n";
     }
@@ -131,6 +131,71 @@ void LoadContactsFromFile(vector<stContact>& vContacts)
         vContacts.push_back(LoadContactFromLine(Line));
     }
     MyFile.close();
+}
+stContact* FindContactByName(string FullName,
+    vector<stContact>& vContacts)
+{
+    string LowerName = UtilityLib::ConvertToLower(FullName);
+    for (stContact& Contact : vContacts)
+    {
+        if (UtilityLib::ConvertToLower(GetFullName(Contact)) == LowerName)
+            return &Contact;
+    }
+    return nullptr;
+}
+
+stContact* FindContactByPhone(string Phone,
+    vector<stContact>& vContacts)
+{
+    for (stContact& Contact : vContacts)
+    {
+        if (Contact.Phone == Phone)
+            return &Contact;
+    }
+    return nullptr;
+}
+
+stContact* FindContact(vector<stContact>& vContacts)
+{
+    short Choice = 0;
+    do
+    {
+        cout << "Search By [1] Name, [2] Phone? ";
+        cin >> Choice;
+    } while (Choice < 1 || Choice > 2);
+
+    cin.ignore();
+    string SearchTerm = "";
+
+    if (Choice == enSearchBy::enSearchByName)
+    {
+        cout << "Enter Name: ";
+        getline(cin, SearchTerm);
+        return FindContactByName(
+            UtilityLib::TrimString(SearchTerm), vContacts);
+    }
+    else
+    {
+        cout << "Enter Phone: ";
+        getline(cin, SearchTerm);
+        return FindContactByPhone(
+            UtilityLib::TrimString(SearchTerm), vContacts);
+    }
+}
+
+void ShowFindContact(vector<stContact>& vContacts)
+{
+    if (vContacts.empty())
+    {
+        cout << "\nNo Contacts Found!\n";
+        return;
+    }
+
+    stContact* pContact = FindContact(vContacts);
+    if (pContact == nullptr)
+        cout << "\nContact Not Found!\n";
+    else
+        PrintContactCard(*pContact);
 }
 int main()
 {
