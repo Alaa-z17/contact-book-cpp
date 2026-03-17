@@ -343,7 +343,80 @@ void UpdateContact(vector<stContact>& vContacts)
     SaveContactsToFile(vContacts);
     cout << "\nContact Updated Successfully!\n";
 }
+void ResetScreen()
+{
+    system("cls");
+    system("color 0F");
+}
+
+void PrintMainMenu()
+{
+    cout << "\n";
+    cout << string(40, '=') << "\n";
+    cout << "        CONTACT BOOK SYSTEM\n";
+    cout << string(40, '=') << "\n";
+    cout << "[1] List All Contacts\n";
+    cout << "[2] Add New Contact\n";
+    cout << "[3] Delete Contact\n";
+    cout << "[4] Update Contact\n";
+    cout << "[5] Find Contact\n";
+    cout << "[6] Exit\n";
+    cout << string(40, '=') << "\n";
+    cout << "Enter your choice: ";
+}
+
+enMainMenuChoice ReadMainMenuChoice()
+{
+    short Choice = 0;
+    do
+    {
+        PrintMainMenu();
+        cin >> Choice;
+    } while (Choice < 1 || Choice > 6);
+    return (enMainMenuChoice)Choice;
+}
+
+void RunContactBook()
+{
+    vector<stContact> vContacts;
+    LoadContactsFromFile(vContacts);
+
+    enMainMenuChoice Choice;
+    do
+    {
+        ResetScreen();
+        Choice = ReadMainMenuChoice();
+        switch (Choice)
+        {
+        case enMainMenuChoice::enListContacts:
+            PrintContactList(vContacts);
+            break;
+        case enMainMenuChoice::enAddContact:
+            AddContact(vContacts);
+            break;
+        case enMainMenuChoice::enDeleteContact:
+            DeleteContact(vContacts);
+            break;
+        case enMainMenuChoice::enUpdateContact:
+            UpdateContact(vContacts);
+            break;
+        case enMainMenuChoice::enFindContact:
+            ShowFindContact(vContacts);
+            break;
+        case enMainMenuChoice::enExit:
+            cout << "\nGoodbye!\n";
+            break;
+        }
+        if (Choice != enMainMenuChoice::enExit)
+        {
+            cout << "\nPress Enter to continue...";
+            cin.ignore();
+            cin.get();
+        }
+    } while (Choice != enMainMenuChoice::enExit);
+}
 int main()
 {
+    RunContactBook();
     return 0;
 }
