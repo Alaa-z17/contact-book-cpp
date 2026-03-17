@@ -9,6 +9,7 @@ advanced concepts of **Functional & Procedural Programming**.
 
 - Vectors for dynamic contact management
 - Pointers for search and update operations
+- Recursion — Merge Sort for alphabetical sorting
 - File I/O — save and load contacts from file
 - String manipulation with `substr`, `find`, `tolower`
 - Input validation using custom header libraries
@@ -24,6 +25,7 @@ advanced concepts of **Functional & Procedural Programming**.
 - ❌ Delete contact with confirmation
 - ✏️ Update existing contact
 - 🔍 Find contact by name or phone
+- 🔤 Sort contacts A-Z using Merge Sort
 - 💾 Auto-save contacts to file
 
 ---
@@ -52,6 +54,8 @@ main()
            │    └── FindContact()
            ├── ShowFindContact()
            │    └── PrintContactCard()
+           ├── SortContacts()         ← Recursive Merge Sort
+           │    └── MergeContacts()
            └── SaveContactsToFile()
 ```
 
@@ -65,6 +69,7 @@ main()
 | Structs        | `stContact`                                      |
 | Vectors        | `vContacts`                                      |
 | Pointers       | `FindContactByName()`, `FindContactByPhone()`    |
+| Recursion      | `SortContacts()` — Merge Sort                    |
 | File I/O       | `SaveContactsToFile()`, `LoadContactsFromFile()` |
 | Namespaces     | `ValidationLib`, `UtilityLib`                    |
 | String Methods | `find()`, `substr()`, `tolower()`                |
