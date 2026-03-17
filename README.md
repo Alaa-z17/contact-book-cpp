@@ -26,6 +26,7 @@ advanced concepts of **Functional & Procedural Programming**.
 - ✏️ Update existing contact
 - 🔍 Find contact by name or phone
 - 🔤 Sort contacts A-Z using Merge Sort
+- 🗑️ Clear all contacts with confirmation
 - 💾 Auto-save contacts to file
 
 ---
@@ -57,6 +58,7 @@ main()
            ├── SortContacts()         ← Recursive Merge Sort
            │    └── MergeContacts()
            └── SaveContactsToFile()
+           ├── ClearAllContacts()
 ```
 
 ---
@@ -74,8 +76,6 @@ main()
 | Namespaces     | `ValidationLib`, `UtilityLib`                    |
 | String Methods | `find()`, `substr()`, `tolower()`                |
 | Header Files   | `ValidationLib.h`, `UtilityLib.h`                |
-
----
 
 ## 📁 File Structure
 
