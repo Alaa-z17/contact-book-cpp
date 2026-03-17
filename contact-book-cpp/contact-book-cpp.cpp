@@ -275,6 +275,74 @@ void AddContact(vector<stContact>& vContacts)
     SaveContactsToFile(vContacts);
     cout << "\nContact Added Successfully!\n";
 }
+void DeleteContact(vector<stContact>& vContacts)
+{
+    if (vContacts.empty())
+    {
+        cout << "\nNo Contacts Found!\n";
+        return;
+    }
+
+    PrintContactList(vContacts);
+
+    stContact* pContact = FindContact(vContacts);
+    if (pContact == nullptr)
+    {
+        cout << "\nContact Not Found!\n";
+        return;
+    }
+
+    PrintContactCard(*pContact);
+
+    char Confirm = 'N';
+    cout << "\nAre you sure you want to delete? Y/N? ";
+    cin >> Confirm;
+
+    if (Confirm == 'Y' || Confirm == 'y')
+    {
+        for (int i = 0; i < vContacts.size(); i++)
+        {
+            if (vContacts[i].Phone == pContact->Phone)
+            {
+                vContacts.erase(vContacts.begin() + i);
+                break;
+            }
+        }
+        SaveContactsToFile(vContacts);
+        cout << "\nContact Deleted Successfully!\n";
+    }
+}
+
+void UpdateContact(vector<stContact>& vContacts)
+{
+    if (vContacts.empty())
+    {
+        cout << "\nNo Contacts Found!\n";
+        return;
+    }
+
+    PrintContactList(vContacts);
+
+    stContact* pContact = FindContact(vContacts);
+    if (pContact == nullptr)
+    {
+        cout << "\nContact Not Found!\n";
+        return;
+    }
+
+    PrintContactCard(*pContact);
+
+    cout << "\nEnter New Details:\n";
+    cin.ignore();
+    pContact->FirstName = ReadFirstName();
+    pContact->LastName = ReadLastName();
+    pContact->Phone = ReadPhone();
+    pContact->Email = ReadEmail();
+    pContact->Address = ReadAddress();
+
+    SaveContactsToFile(vContacts);
+    cout << "\nContact Updated Successfully!\n";
+}
 int main()
 {
     return 0;
