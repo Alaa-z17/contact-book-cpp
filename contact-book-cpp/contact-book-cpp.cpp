@@ -16,7 +16,8 @@ enum enMainMenuChoice
     enDeleteContact = 3,
     enUpdateContact = 4,
     enFindContact = 5,
-    enExit = 6
+    enSortContacts = 6,
+    enExit = 7
 };
 
 struct stContact
@@ -132,6 +133,117 @@ void LoadContactsFromFile(vector<stContact>& vContacts)
     }
     MyFile.close();
 }
+/**
+ * @brief Merges two sorted halves of a contacts vector.
+ *
+ * @param vContacts The full contacts vector.
+ * @param Left      Start index of the left half.
+ * @param Mid       End index of the left half.
+ * @param Right     End index of the right half.
+ *
+ * @details
+ * Takes two already-sorted halves and merges them into
+ * one sorted sequence. Compares contacts by full name
+ * alphabetically using ConvertToLower for case-insensitive sort.
+ *
+ * @example
+ * Before: [John, Alice, Mark, Bob]
+ *          Left half   Right half
+ *          [John,Alice] [Mark,Bob]  ← already sorted individually
+ * After:  [Alice, Bob, John, Mark]  ← merged and sorted
+ */
+void MergeContacts(vector<stContact>& vContacts,
+    int Left, int Mid, int Right)
+{
+    int LeftSize = Mid - Left + 1;
+    int RightSize = Right - Mid;
+
+    vector<stContact> vLeft(LeftSize);
+    vector<stContact> vRight(RightSize);
+
+    for (int i = 0; i < LeftSize; i++)
+        vLeft[i] = vContacts[Left + i];
+    for (int i = 0; i < RightSize; i++)
+        vRight[i] = vContacts[Mid + 1 + i];
+
+    int i = 0, j = 0, k = Left;
+    while (i < LeftSize && j < RightSize)
+    {
+        if (UtilityLib::ConvertToLower(GetFullName(vLeft[i])) <=
+            UtilityLib::ConvertToLower(GetFullName(vRight[j])))
+        {
+            vContacts[k] = vLeft[i];
+            i++;
+        }
+        else
+        {
+            vContacts[k] = vRight[j];
+            j++;
+        }
+        k++;
+    }
+    while (i < LeftSize)
+    {
+        vContacts[k] = vLeft[i];
+        i++;
+        k++;
+    }
+    while (j < RightSize)
+    {
+        vContacts[k] = vRight[j];
+        j++;
+        k++;
+    }
+}
+
+/**
+ * @brief Sorts contacts alphabetically using Merge Sort algorithm.
+ *
+ * @param vContacts The contacts vector to sort.
+ * @param Left      Start index of the current segment.
+ * @param Right     End index of the current segment.
+ *
+ * @details
+ * This is a RECURSIVE function — it calls itself twice
+ * on smaller segments until it reaches the base case.
+ *
+ * Why is it called Recursion?
+ * Because SortContacts calls SortContacts itself:
+ *
+ *   SortContacts(vContacts, 0, 3)        ← original call
+ *    ├── SortContacts(vContacts, 0, 1)   ← calls itself (left half)
+ *    │    ├── SortContacts(vContacts, 0, 0) ← base case, stops
+ *    │    └── SortContacts(vContacts, 1, 1) ← base case, stops
+ *    └── SortContacts(vContacts, 2, 3)   ← calls itself (right half)
+ *         ├── SortContacts(vContacts, 2, 2) ← base case, stops
+ *         └── SortContacts(vContacts, 3, 3) ← base case, stops
+ *
+ * Base case (Left >= Right):
+ * A segment of 1 element is already sorted — no need to go further.
+ * Without a base case, the function would call itself forever.
+ *
+ * @example
+ * Input:  [John, Alice, Mark, Bob]
+ * Output: [Alice, Bob, John, Mark]
+ */
+void SortContacts(vector<stContact>& vContacts,
+    int Left, int Right)
+{
+    // Base case - recursion stops here
+    if (Left >= Right)
+        return;
+
+    int Mid = Left + (Right - Left) / 2;
+
+    // Recursive calls
+    SortContacts(vContacts, Left, Mid);
+    SortContacts(vContacts, Mid + 1, Right);
+
+    // Merge the sorted halves
+    MergeContacts(vContacts, Left, Mid, Right);
+}
+
+
 stContact* FindContactByName(string FullName,
     vector<stContact>& vContacts)
 {
@@ -360,7 +472,8 @@ void PrintMainMenu()
     cout << "[3] Delete Contact\n";
     cout << "[4] Update Contact\n";
     cout << "[5] Find Contact\n";
-    cout << "[6] Exit\n";
+    cout << "[6] Sort Contacts A-Z\n";
+    cout << "[7] Exit\n";
     cout << string(40, '=') << "\n";
     cout << "Enter your choice: ";
 }
@@ -372,7 +485,7 @@ enMainMenuChoice ReadMainMenuChoice()
     {
         PrintMainMenu();
         cin >> Choice;
-    } while (Choice < 1 || Choice > 6);
+    } while (Choice < 1 || Choice > 7);
     return (enMainMenuChoice)Choice;
 }
 
@@ -402,6 +515,11 @@ void RunContactBook()
             break;
         case enMainMenuChoice::enFindContact:
             ShowFindContact(vContacts);
+            break;
+        case enMainMenuChoice::enSortContacts:
+            SortContacts(vContacts, 0, vContacts.size() - 1);
+            SaveContactsToFile(vContacts);
+            cout << "\nContacts Sorted A-Z Successfully!\n";
             break;
         case enMainMenuChoice::enExit:
             cout << "\nGoodbye!\n";
