@@ -169,7 +169,7 @@ stContact* FindContact(vector<stContact>& vContacts)
 
     if (Choice == enSearchBy::enSearchByName)
     {
-        cout << "Enter Name: ";
+        cout << "Enter Full Name: ";
         getline(cin, SearchTerm);
         return FindContactByName(
             UtilityLib::TrimString(SearchTerm), vContacts);
