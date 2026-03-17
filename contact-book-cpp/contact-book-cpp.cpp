@@ -197,6 +197,84 @@ void ShowFindContact(vector<stContact>& vContacts)
     else
         PrintContactCard(*pContact);
 }
+string ReadFirstName()
+{
+    string FirstName = "";
+    do
+    {
+        cout << "Enter First Name: ";
+        cin.ignore();
+        getline(cin, FirstName);
+        FirstName = UtilityLib::TrimString(FirstName);
+    } while (FirstName.empty());
+    return FirstName;
+}
+
+string ReadLastName()
+{
+    string LastName = "";
+    do
+    {
+        cout << "Enter Last Name: ";
+        getline(cin, LastName);
+        LastName = UtilityLib::TrimString(LastName);
+    } while (LastName.empty());
+    return LastName;
+}
+
+string ReadPhone()
+{
+    string Phone = "";
+    do
+    {
+        cout << "Enter Phone: ";
+        getline(cin, Phone);
+        Phone = UtilityLib::TrimString(Phone);
+        if (!ValidationLib::IsValidPhone(Phone))
+            cout << "Invalid Phone! Try again.\n";
+    } while (!ValidationLib::IsValidPhone(Phone));
+    return Phone;
+}
+
+string ReadEmail()
+{
+    string Email = "";
+    do
+    {
+        cout << "Enter Email: ";
+        getline(cin, Email);
+        Email = UtilityLib::TrimString(Email);
+        if (!ValidationLib::IsValidEmail(Email))
+            cout << "Invalid Email! Try again.\n";
+    } while (!ValidationLib::IsValidEmail(Email));
+    return Email;
+}
+
+string ReadAddress()
+{
+    string Address = "";
+    cout << "Enter Address: ";
+    getline(cin, Address);
+    return UtilityLib::TrimString(Address);
+}
+
+stContact ReadNewContact()
+{
+    stContact Contact;
+    Contact.FirstName = ReadFirstName();
+    Contact.LastName = ReadLastName();
+    Contact.Phone = ReadPhone();
+    Contact.Email = ReadEmail();
+    Contact.Address = ReadAddress();
+    return Contact;
+}
+
+void AddContact(vector<stContact>& vContacts)
+{
+    vContacts.push_back(ReadNewContact());
+    SaveContactsToFile(vContacts);
+    cout << "\nContact Added Successfully!\n";
+}
 int main()
 {
     return 0;
