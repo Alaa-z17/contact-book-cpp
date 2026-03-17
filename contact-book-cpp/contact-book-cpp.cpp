@@ -74,7 +74,64 @@ void PrintContactList(vector<stContact>& vContacts)
     cout << string(65, '-') << "\n";
     cout << "Total Contacts: " << vContacts.size() << "\n";
 }
+void SaveContactsToFile(vector<stContact>& vContacts)
+{
+    ofstream MyFile("Contacts.txt");
+    for (stContact& Contact : vContacts)
+    {
+        MyFile << Contact.FirstName << "#";
+        MyFile << Contact.LastName << "#";
+        MyFile << Contact.Phone << "#";
+        MyFile << Contact.Email << "#";
+        MyFile << Contact.Address << "\n";
+    }
+    MyFile.close();
+}
 
+stContact LoadContactFromLine(string Line)
+{
+    stContact Contact;
+    string Value = "";
+    short FieldNumber = 0;
+
+    for (char& C : Line)
+    {
+        if (C == '#')
+        {
+            switch (FieldNumber)
+            {
+            case 0: Contact.FirstName = Value; break;
+            case 1: Contact.LastName = Value; break;
+            case 2: Contact.Phone = Value; break;
+            case 3: Contact.Email = Value; break;
+            }
+            Value = "";
+            FieldNumber++;
+        }
+        else
+        {
+            Value += C;
+        }
+    }
+    Contact.Address = Value;
+    return Contact;
+}
+
+void LoadContactsFromFile(vector<stContact>& vContacts)
+{
+    ifstream MyFile("Contacts.txt");
+    if (!MyFile.is_open())
+        return;
+
+    vContacts.clear();
+    string Line = "";
+    while (getline(MyFile, Line))
+    {
+        if (Line.empty()) continue;
+        vContacts.push_back(LoadContactFromLine(Line));
+    }
+    MyFile.close();
+}
 int main()
 {
     return 0;
