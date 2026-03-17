@@ -27,8 +27,8 @@ namespace UtilityLib
 
     string TrimString(string Text)
     {
-        int Start = Text.find_first_not_of(" ");
-        int End = Text.find_last_not_of(" ");
+        string::size_type Start = Text.find_first_not_of(" ");
+        string::size_type End = Text.find_last_not_of(" ");
         if (Start == string::npos)
             return "";
         return Text.substr(Start, End - Start + 1);

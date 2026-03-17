@@ -18,10 +18,10 @@ namespace ValidationLib
 
     bool IsValidEmail(string Email)
     {
-        int AtPos = Email.find('@');
+        string::size_type AtPos = Email.find('@');
         if (AtPos == string::npos)
             return false;
-        int DotPos = Email.find('.', AtPos);
+        string::size_type DotPos = Email.find('.', AtPos);
         if (DotPos == string::npos)
             return false;
         return true;

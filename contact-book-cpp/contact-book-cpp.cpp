@@ -517,9 +517,16 @@ void RunContactBook()
             ShowFindContact(vContacts);
             break;
         case enMainMenuChoice::enSortContacts:
-            SortContacts(vContacts, 0, vContacts.size() - 1);
-            SaveContactsToFile(vContacts);
-            cout << "\nContacts Sorted A-Z Successfully!\n";
+            if (vContacts.empty())
+            {
+                cout << "\nNo Contacts Found!\n";
+            }
+            else
+            {
+                SortContacts(vContacts, 0, static_cast<int>(vContacts.size()) - 1);
+                SaveContactsToFile(vContacts);
+                cout << "\nContacts Sorted A-Z Successfully!\n";
+            }
             break;
         case enMainMenuChoice::enExit:
             cout << "\nGoodbye!\n";
