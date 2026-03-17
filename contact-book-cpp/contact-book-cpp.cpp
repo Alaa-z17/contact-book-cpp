@@ -17,7 +17,8 @@ enum enMainMenuChoice
     enUpdateContact = 4,
     enFindContact = 5,
     enSortContacts = 6,
-    enExit = 7
+    enClearContacts = 7,
+    enExit = 8
 };
 
 struct stContact
@@ -455,6 +456,25 @@ void UpdateContact(vector<stContact>& vContacts)
     SaveContactsToFile(vContacts);
     cout << "\nContact Updated Successfully!\n";
 }
+void ClearAllContacts(vector<stContact>& vContacts)
+{
+    if (vContacts.empty())
+    {
+        cout << "\nNo Contacts Found!\n";
+        return;
+    }
+
+    char Confirm = 'N';
+    cout << "\nAre you sure you want to delete ALL contacts? Y/N? ";
+    cin >> Confirm;
+
+    if (Confirm == 'Y' || Confirm == 'y')
+    {
+        vContacts.clear();
+        SaveContactsToFile(vContacts);
+        cout << "\nAll Contacts Deleted Successfully!\n";
+    }
+}
 void ResetScreen()
 {
     system("cls");
@@ -473,7 +493,8 @@ void PrintMainMenu()
     cout << "[4] Update Contact\n";
     cout << "[5] Find Contact\n";
     cout << "[6] Sort Contacts A-Z\n";
-    cout << "[7] Exit\n";
+    cout << "[7] Clear All Contacts\n";
+    cout << "[8] Exit\n";
     cout << string(40, '=') << "\n";
     cout << "Enter your choice: ";
 }
@@ -485,7 +506,7 @@ enMainMenuChoice ReadMainMenuChoice()
     {
         PrintMainMenu();
         cin >> Choice;
-    } while (Choice < 1 || Choice > 7);
+    } while (Choice < 1 || Choice > 8);
     return (enMainMenuChoice)Choice;
 }
 
@@ -527,6 +548,9 @@ void RunContactBook()
                 SaveContactsToFile(vContacts);
                 cout << "\nContacts Sorted A-Z Successfully!\n";
             }
+            break;
+        case enMainMenuChoice::enClearContacts:
+            ClearAllContacts(vContacts);
             break;
         case enMainMenuChoice::enExit:
             cout << "\nGoodbye!\n";

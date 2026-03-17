@@ -3,5 +3,5 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="contact-book-cpp/contact-book-cpp.vcxproj" />
+  <Project Path="contact-book-cpp/contact-book-cpp.vcxproj" Id="53da9e82-d35b-47a4-83c1-2f4ed683e023" />
 </Solution>
