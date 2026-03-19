@@ -5,6 +5,12 @@ advanced concepts of **Functional & Procedural Programming**.
 
 ---
 
+## 🎬 Video Walkthrough
+
+[![Contact Book System in C++](https://img.youtube.com/vi/ZirlRMq3SZg/0.jpg)](https://youtu.be/ZirlRMq3SZg)
+
+> Click the image above to watch the full project walkthrough on YouTube.
+
 ## 🎯 Learning Objectives
 
 - Vectors for dynamic contact management
